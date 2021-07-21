@@ -39,7 +39,12 @@ export async function config(username, email) {
 }
 
 export async function commit(message, cloneFolder, repos) {
-  await Promise.all(repos.map((repo) => command(`git add . && git commit -m "${message}"`, { cwd: cloneFolder })))
+  await Promise.all(
+    repos.map(async (repo) => {
+      await command(`git add .`, { cwd: cloneFolder })
+      await command(`git commit -m "${message}"`, { cwd: cloneFolder })
+    })
+  )
 }
 
 export async function pullrequest(org, repos, branch, title, body = "") {
