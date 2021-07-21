@@ -41,8 +41,9 @@ export async function config(username, email) {
 export async function commit(message, cloneFolder, repos) {
   await Promise.all(
     repos.map(async (repo) => {
-      await command(`git add .`, { cwd: cloneFolder })
-      await command(`git commit -m "${message}"`, { cwd: cloneFolder })
+      const repoFolder = join(cloneFolder, repo)
+      await command(`git add .`, { cwd: repoFolder })
+      await command(`git commit -m '${message}'`, { cwd: repoFolder })
     })
   )
 }
