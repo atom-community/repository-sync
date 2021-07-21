@@ -1,5 +1,8 @@
 import { Octokit } from "@octokit/core"
-export const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+import { createPullRequest } from "octokit-plugin-create-pull-request"
+const MyOctokit = Octokit.plugin(createPullRequest)
+export const octokit = new MyOctokit({ auth: process.env.GITHUB_TOKEN })
+
 import { command } from "execa"
 import { join } from "path"
 import * as fs from "fs-extra"
@@ -37,4 +40,24 @@ export async function config(username, email) {
 
 export async function commit(message, cloneFolder, repos) {
   await Promise.all(repos.map((repo) => command(`git add . && git commit -m "${message}"`, { cwd: cloneFolder })))
+}
+
+export async function pullrequest(org, repos, branch, title, body = "") {
+  await Promise.all(
+    repos.map((repo) =>
+      octokit.createPullRequest({
+        owner: org,
+        repo,
+        title,
+        body,
+        head: branch,
+        changes: [
+          {
+            commit: "automatic PR",
+            emptyCommit: true,
+          },
+        ],
+      })
+    )
+  )
 }

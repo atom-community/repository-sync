@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
     "@types/node": "^16.4.0",
+    "octokit-plugin-create-pull-request": "^3.9.3",
     "prettier-config-atomic": "^2.0.5"
   },
   "prettier": "prettier-config-atomic"
