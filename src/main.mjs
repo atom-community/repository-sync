@@ -15,6 +15,6 @@ async function main() {
 
   const repos = await git.clone(org, cloneFolder)
 
-  await copyTemplate(repos, templatesFolder)
+  await copyTemplate(repos, cloneFolder, templatesFolder)
 }
 main()
