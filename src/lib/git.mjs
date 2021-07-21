@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/core"
 import { createPullRequest } from "octokit-plugin-create-pull-request"
 const MyOctokit = Octokit.plugin(createPullRequest)
 export const octokit = new MyOctokit({ auth: process.env.GITHUB_TOKEN })
+import simpleGit from "simple-git"
 
 import { command } from "execa"
 import { join } from "path"
@@ -42,8 +43,9 @@ export async function commit(message, cloneFolder, repos) {
   await Promise.all(
     repos.map(async (repo) => {
       const repoFolder = join(cloneFolder, repo)
+      const git = simpleGit(repoFolder)
       await command(`git add .`, { cwd: repoFolder })
-      await command(`git commit -m '${message}'`, { cwd: repoFolder })
+      await git.commit(message)
     })
   )
 }
