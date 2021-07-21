@@ -2,7 +2,7 @@
   "name": "organization-sync",
   "version": "0.1.0",
   "description": "A set of scripts to keep the repositories in sync",
-  "main": "index.js",
+  "main": "./src/main.mjs",
   "scripts": {
     "format": "prettier --write .",
     "start": "node ./src/main.mjs"
