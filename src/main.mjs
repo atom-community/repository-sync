@@ -1,12 +1,14 @@
 import { join } from "path"
 import * as git from "./lib/git.mjs"
 import { copyTemplate, removePath } from "./lib/files.mjs"
+import { mkdir, track } from "temp"
+track()
 
 const org = "atom-community"
 const username = "aminya"
 const email = "aminyahyaabadi74@gmail.com"
 
-const cloneFolder = join(process.cwd(), org)
+const cloneFolder = await mkdir(org)
 const templatesFolder = join(process.cwd(), "templates")
 
 async function main() {
