@@ -16,10 +16,10 @@ async function main() {
 
   const repos = await git.clone(org, cloneFolder)
 
-  await copyTemplate(repos, cloneFolder, templatesFolder)
-
-  const removePaths = [".github/workflows/bump_deps.yml"]
+  const removePaths = [".github/workflows/bump_deps.yml", ".github/renovate.json"]
   await Promise.all(removePaths.map((pth) => removePath(repos, cloneFolder, pth)))
+
+  await copyTemplate(repos, cloneFolder, templatesFolder)
 
   await git.commit("chore: sync with the repository template", cloneFolder, repos)
 
