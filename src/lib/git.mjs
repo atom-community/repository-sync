@@ -50,6 +50,17 @@ export async function commit(message, cloneFolder, repos) {
   )
 }
 
+export async function push(cloneFolder, repos) {
+  await Promise.all(
+    repos.map(async (repo) => {
+      const repoFolder = join(cloneFolder, repo)
+      const git = simpleGit(repoFolder)
+      await git.push()
+    })
+  )
+}
+
+
 export async function pullrequest(org, repos, branch, title, body = "") {
   await Promise.all(
     repos.map((repo) =>

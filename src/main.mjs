@@ -22,5 +22,7 @@ async function main() {
   await Promise.all(removePaths.map((pth) => removePath(repos, cloneFolder, pth)))
 
   await git.commit("chore: sync with the repository template", cloneFolder, repos)
+
+  await git.push(cloneFolder, repos)
 }
 main()
