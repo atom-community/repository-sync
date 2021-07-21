@@ -2,10 +2,10 @@ import { Octokit } from "@octokit/core"
 export const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 import { command } from "execa"
 import fs from "fs-extra"
-const { mkdir, readdir }  = fs
+const { mkdirp, readdir }  = fs
 
 export async function clone(org, cloneFolder) {
-  await mkdir(cloneFolder)
+  await mkdirp(cloneFolder)
 
   const data = (
     await octokit.request("GET /orgs/{org}/repos", {
