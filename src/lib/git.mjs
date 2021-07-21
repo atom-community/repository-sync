@@ -22,11 +22,11 @@ export async function clone(org, cloneFolder) {
   ).data
 
   await Promise.all(
-    data.map(async ({ git_url, name }) => {
+    data.map(async ({ clone_url, name }) => {
       if (await pathExists(join(cloneFolder, name))) {
         await command("git pull", { cwd: join(cloneFolder, name) })
       } else {
-        await command(`git clone --depth 1 --single-branch ${git_url}`, { cwd: cloneFolder })
+        await command(`git clone --depth 1 --single-branch ${clone_url}`, { cwd: cloneFolder })
       }
     })
   )
