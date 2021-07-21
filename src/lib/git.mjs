@@ -25,3 +25,6 @@ export async function config(username, email) {
   await command(`git config --global user.email ${email}`)
 }
 
+export async function commit(message, cloneFolder, repos) {
+  await Promise.all(repos.map((repo) => command(`git add . && git commit -m "${message}"`, { cwd: cloneFolder })))
+}
