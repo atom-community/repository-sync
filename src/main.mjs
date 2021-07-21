@@ -1,6 +1,6 @@
 import { join } from "path"
 import * as git from "./lib/git.mjs"
-import { copyTemplate } from "./lib/files.mjs"
+import { copyTemplate, removePath } from "./lib/files.mjs"
 
 const org = "atom-community"
 const username = "aminya"
@@ -15,5 +15,9 @@ async function main() {
   const repos = await git.clone(org, cloneFolder)
 
   await copyTemplate(repos, cloneFolder, templatesFolder)
+
+  const removePaths = [".github/workflows/bump_deps.yml"]
+
+  await Promise.all(removePaths.map((pth) => removePath(repos, cloneFolder, pth)))
 }
 main()

@@ -4,8 +4,8 @@ import { command } from "execa"
 import { join } from "path"
 import * as fs from "fs-extra"
 const { mkdirp, pathExists } = fs
-import { promise } from "fs"
-const { readdir } = promise
+import { promises } from "fs"
+const { readdir } = promises
 
 export async function clone(org, cloneFolder) {
   await mkdirp(cloneFolder)
