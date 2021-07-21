@@ -20,3 +20,8 @@ export async function clone(org, cloneFolder) {
   return readdir(cloneFolder)
 }
 
+export async function config(username, email) {
+  await command(`git config --global user.name ${username}`)
+  await command(`git config --global user.email ${email}`)
+}
+
