@@ -4,6 +4,7 @@
   "description": "A set of scripts to keep the repositories in sync",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write .",
     "start": "node ./src/main.mjs"
   },
   "keywords": [

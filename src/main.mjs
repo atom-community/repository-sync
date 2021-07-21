@@ -10,7 +10,6 @@ const cloneFolder = join(process.cwd(), org)
 const templatesFolder = join(process.cwd(), "templates")
 
 async function main() {
-
   await git.config(username, email)
 
   const repos = await git.clone(org, cloneFolder)

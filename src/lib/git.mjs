@@ -3,7 +3,7 @@ export const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 import { command } from "execa"
 import { join } from "path"
 import * as fs from "fs-extra"
-const { mkdirp, readdir, pathExists }  = fs
+const { mkdirp, readdir, pathExists } = fs
 
 export async function clone(org, cloneFolder) {
   await mkdirp(cloneFolder)
@@ -15,13 +15,15 @@ export async function clone(org, cloneFolder) {
     })
   ).data
 
-  await Promise.all(data.map(async ({ git_url, name }) => {
-    if (await pathExists(join(cloneFolder, name))) {
-      await command("git pull", { cwd: cloneFolder })
-    } else {
-      await command(`git clone --depth 1 --single-branch ${git_url}`, { cwd: cloneFolder })
-    }
-  }))
+  await Promise.all(
+    data.map(async ({ git_url, name }) => {
+      if (await pathExists(join(cloneFolder, name))) {
+        await command("git pull", { cwd: cloneFolder })
+      } else {
+        await command(`git clone --depth 1 --single-branch ${git_url}`, { cwd: cloneFolder })
+      }
+    })
+  )
 
   return readdir(cloneFolder)
 }
