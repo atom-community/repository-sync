@@ -22,7 +22,10 @@ export async function clone(org, cloneFolder) {
   ).data
 
   await Promise.all(
-    data.map(async ({ clone_url, name }) => {
+    data.map(async ({ clone_url, name, archived }) => {
+      if (archived) {
+        return
+      }
       if (await pathExists(join(cloneFolder, name))) {
         await command("git pull", { cwd: join(cloneFolder, name) })
       } else {
