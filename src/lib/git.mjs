@@ -18,6 +18,7 @@ export async function clone(org, cloneFolder) {
     await octokit.request("GET /orgs/{org}/repos", {
       org,
       type: "public",
+      per_page: 100
     })
   ).data
 
