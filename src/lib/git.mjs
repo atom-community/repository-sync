@@ -11,20 +11,23 @@ const { mkdirp, pathExists } = fs
 import { promises } from "fs"
 const { readdir } = promises
 
-export async function clone(org, cloneFolder) {
-  await mkdirp(cloneFolder)
-
+export async function repos(org) {
   const data = (
     await octokit.request("GET /orgs/{org}/repos", {
       org,
       type: "public",
-      per_page: 100
+      per_page: 100,
     })
   ).data
+  return data
+}
 
+export async function clone(org, cloneFolder, ignoreRepos = []) {
+  await mkdirp(cloneFolder)
+  const data = await repos(org)
   await Promise.all(
     data.map(async ({ clone_url, name, archived }) => {
-      if (archived) {
+      if (archived || ignoreRepos.includes(name)) {
         return
       }
       if (await pathExists(join(cloneFolder, name))) {
@@ -64,6 +67,43 @@ export async function push(cloneFolder, repos) {
   )
 }
 
+export async function closeBotPullRequests(org, repos) {
+  await Promise.all(
+    repos.map(async (repo) => {
+      const prs = [
+        ...(
+          await octokit.request("GET /repos/{owner}/{repo}/pulls", {
+            owner: org,
+            repo,
+            state: "open",
+            head: `${org}/Bump_dependencies`,
+          })
+        ).data,
+        ...(
+          await octokit.request("GET /repos/{owner}/{repo}/pulls", {
+            owner: org,
+            repo,
+            state: "open",
+            head: `${org}/Bump_devDependencies`,
+          })
+        ).data,
+      ].map((pr) => pr.number)
+
+      await Promise.all(
+        prs.map((pull_number) =>
+          octokit
+            .request("PATCH /repos/{owner}/{repo}/pulls/{pull_number}", {
+              owner: org,
+              repo: repo,
+              pull_number,
+              state: "closed",
+            })
+            .catch((e) => console.error(e))
+        )
+      )
+    })
+  )
+}
 
 export async function pullrequest(org, repos, branch, title, body = "") {
   await Promise.all(

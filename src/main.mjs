@@ -8,14 +8,18 @@ const org = "atom-community"
 const username = "aminya"
 const email = "aminyahyaabadi74@gmail.com"
 
+const ignoreRepos = ["DefinitelyTyped"]
+
 const cloneFolder = await mkdir(org)
 const templatesFolder = join(process.cwd(), "templates")
 
-async function main() {
+async function syncTemplates() {
   await git.config(username, email)
 
-  const repos = await git.clone(org, cloneFolder)
+  console.log("Cloning...")
+  const repos = await git.clone(org, cloneFolder, ignoreRepos)
 
+  console.log("Syncing template...")
   const removePaths = [".github/workflows/bump_deps.yml", ".github/renovate.json"]
   await Promise.all(removePaths.map((pth) => removePath(repos, cloneFolder, pth)))
 
@@ -25,4 +29,12 @@ async function main() {
 
   await git.push(cloneFolder, repos)
 }
-main()
+// syncTemplates()
+
+async function closePullRequests() {
+  const repos = (await git.repos(org)).map((repo) => repo.name)
+
+  console.log("Close bot pull requests...")
+  await git.closeBotPullRequests(org, repos)
+}
+closePullRequests()
