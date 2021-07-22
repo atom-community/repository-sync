@@ -67,27 +67,17 @@ export async function push(cloneFolder, repos) {
   )
 }
 
-export async function closeBotPullRequests(org, repos) {
+export async function closePullRequests(org, repos, branch) {
   await Promise.all(
     repos.map(async (repo) => {
-      const prs = [
-        ...(
-          await octokit.request("GET /repos/{owner}/{repo}/pulls", {
-            owner: org,
-            repo,
-            state: "open",
-            head: `${org}/Bump_dependencies`,
-          })
-        ).data,
-        ...(
-          await octokit.request("GET /repos/{owner}/{repo}/pulls", {
-            owner: org,
-            repo,
-            state: "open",
-            head: `${org}/Bump_devDependencies`,
-          })
-        ).data,
-      ].map((pr) => pr.number)
+      const prs = (
+        await octokit.request("GET /repos/{owner}/{repo}/pulls", {
+          owner: org,
+          repo,
+          state: "open",
+          head: `${org}/${branch}`,
+        })
+      ).data.map((pr) => pr.number)
 
       await Promise.all(
         prs.map((pull_number) =>

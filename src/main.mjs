@@ -35,6 +35,9 @@ async function closePullRequests() {
   const repos = (await git.repos(org)).map((repo) => repo.name)
 
   console.log("Close bot pull requests...")
-  await git.closeBotPullRequests(org, repos)
+  await Promise.all([
+    git.closePullRequests(org, repos, "Bump_dependencies"),
+    git.closePullRequests(org, repos, "Bump_devdependencies"),
+  ])
 }
 // closePullRequests()
