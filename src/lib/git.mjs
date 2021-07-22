@@ -95,7 +95,7 @@ export async function closePullRequests(org, repos, branch) {
   )
 }
 
-export async function pullrequest(org, repos, branch, title, body = "") {
+export async function pullRequest(org, repos, files, branch, title, commit, body = "") {
   await Promise.all(
     repos.map((repo) =>
       octokit.createPullRequest({
@@ -106,8 +106,9 @@ export async function pullrequest(org, repos, branch, title, body = "") {
         head: branch,
         changes: [
           {
-            commit: "automatic PR",
-            emptyCommit: true,
+            files,
+            commit,
+            emptyCommit: false,
           },
         ],
       })
