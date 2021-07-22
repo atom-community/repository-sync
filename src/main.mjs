@@ -29,7 +29,7 @@ async function syncTemplates() {
 
   await git.push(cloneFolder, repos)
 }
-// syncTemplates()
+syncTemplates()
 
 async function closePullRequests() {
   const repos = (await git.repos(org)).map((repo) => repo.name)
@@ -37,4 +37,4 @@ async function closePullRequests() {
   console.log("Close bot pull requests...")
   await git.closeBotPullRequests(org, repos)
 }
-closePullRequests()
+// closePullRequests()
