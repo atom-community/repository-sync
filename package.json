@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/core": "^3.5.1",
-    "execa": "^5.1.1",
+    "execa": "^6.0.0",
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
