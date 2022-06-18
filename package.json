@@ -23,11 +23,11 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
-    "@types/node": "^16.4.0",
+    "@types/node": "^18.0.0",
     "@types/temp": "^0.9.1",
     "octokit-plugin-create-pull-request": "^3.9.3",
-    "prettier-config-atomic": "^2.0.5",
-    "simple-git": "^2.41.1",
+    "prettier-config-atomic": "^3.0.0",
+    "simple-git": "^3.0.0",
     "temp": "^0.9.4"
   },
   "prettier": "prettier-config-atomic"
